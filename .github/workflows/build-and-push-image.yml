@@ -1,0 +1,25 @@
+name: Build and Push Image
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Login to Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ${{ secrets.CONTAINER_REGISTRY_URL }}
+          username: ${{ secrets.CONTAINER_REGISTRY_USERNAME }}
+          password: ${{ secrets.CONTAINER_REGISTRY_TOKEN }}
+
+      - name: Build and push image
+        run: |
+          docker build -t ${{ secrets.CONTAINER_REGISTRY_URL }}/dva/simple-dummy:${GITHUB_REF#refs/tags/v} .
+          docker push ${{ secrets.CONTAINER_REGISTRY_URL }}/dva/simple-dummy:${GITHUB_REF#refs/tags/v}
