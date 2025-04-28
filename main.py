@@ -20,7 +20,7 @@ app.add_middleware(
 @app.get("/hello")
 async def hello():
     logging.info("/hello endpoint called")
-    return {"message": "Hello World!"}
+    return {"message": "Test"}
 
 if __name__ == '__main__':
     # start application
